@@ -10,3 +10,5 @@ oystercard.deduct(10)
 p oystercard
 oystercard.touch_in
 p oystercard
+oystercard.balance.times { oystercard.touch_in }
+oystercard.touch_in
