@@ -1,6 +1,9 @@
 require './lib/oystercard'
 
 oystercard = Oystercard.new
+station = Station.new
+oystercard.top_up(4)
+oystercard.touch_in(station)
 p oystercard
 oystercard.balance
 p oystercard
