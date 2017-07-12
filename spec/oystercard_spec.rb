@@ -1,14 +1,25 @@
 require 'oystercard'
 
 describe Oystercard do
+
   subject(:card) { described_class.new }
   let(:station){double :station}
+  let(:entry_station) { double :station }
+  let(:exit_station) { double :station }
+  let(:journey){ {entry_station: entry_station, exit_station: exit_station} }
 
   describe 'Oystercard has initial balance' do
     it 'has a balance of zero' do
       expect(card.balance).to eq(0)
     end
   end
+
+  describe 'Oystercard stores journeys' do
+    it 'has an empty list of journeys by default' do
+      expect(card.journeys).to be_empty
+    end
+  end
+
   describe '#top_up' do
     it 'can top up the balance' do
       expect { card.top_up(1) }.to change { card.balance }.by(1)
@@ -24,30 +35,57 @@ describe Oystercard do
       expect(card).not_to be_in_journey
     end
   end
+
+
   describe '#touch_in' do
-    it 'touches in' do
-      card.top_up(10)
-      card.touch_in(station)
-      expect(card).to be_in_journey
-    end
-    it 'raises an error if oystercard has insufficient funds' do
-      expect { card.touch_in(station) }.to raise_error "You have insufficient funds."
-    end
-    it 'stores the entry station' do
-      card.top_up(4)
-      card.touch_in(station)
-      expect(card.entry_station).to eq station
+
+    context 'in jouney' do
+
+      it 'stores the entry station' do
+        card.top_up(4)
+        card.touch_in(entry_station)
+        expect(card.entry_station).to eq entry_station
+      end
+
+      it 'raises an error if oystercard has insufficient funds' do
+        expect { card.touch_in(entry_station) }.to raise_error "You have insufficient funds."
+      end
+
+      it 'stores a journey' do
+        card.top_up(4)
+        card.touch_in(entry_station)
+        card.touch_out(exit_station)
+        expect(card.journeys).to include journey
+      end
+
     end
   end
+
+    #it 'touches in' do
+    #  card.top_up(10)
+      #card.touch_in(entry_station)
+    #  expect(card).to be_in_journey
+    #end
+
   describe '#touch_out' do
+
+    before do
+      card.top_up(1)
+      card.touch_in(entry_station)
+    end
+
     it 'touches out' do
-      card.touch_out
+      card.touch_out(exit_station)
       expect(card).not_to be_in_journey
     end
     it 'deducts minimum fair from balance on touch out' do
-      card.top_up(1)
-      card.touch_in(station)
-      expect { card.touch_out }.to change { card.balance }.by(-Oystercard::MINIMUM_FAIR)
+      expect { card.touch_out(exit_station) }.to change { card.balance }.by(-Oystercard::MINIMUM_FAIR)
+    end
+
+    it 'stores exit station' do
+      card.touch_out(exit_station)
+      expect(card.exit_station).to eq exit_station
     end
   end
+
 end
