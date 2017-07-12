@@ -18,12 +18,6 @@ describe Oystercard do
       expect { subject.top_up 1 }.to raise_error "Maximum balance of #{maximum_balance} exceeded."
     end
   end
-  describe '#deduct' do
-    it 'deducts amount from balance' do
-      subject.top_up(20)
-      expect { subject.deduct(10) }.to change { subject.balance }.by(-10)
-    end
-  end
   context 'checking for Oystercard activity' do
     it 'is in use' do
       expect(subject).not_to be_in_journey
@@ -41,6 +35,11 @@ describe Oystercard do
   describe '#touch_out' do
     it 'touches out' do
       expect(subject.touch_out).to eq false
+    end
+    it 'deducts minimum fair from balance on touch out' do
+      subject.top_up(1)
+      subject.touch_in
+      expect { subject.touch_out }.to change{ subject.balance }.by(-Oystercard::MINIMUM_FAIR)
     end
   end
 end
