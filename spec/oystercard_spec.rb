@@ -30,26 +30,14 @@ describe Oystercard do
       expect { card.top_up 1 }.to raise_error "Maximum balance of #{maximum_balance} exceeded."
     end
   end
-  context 'checking for Oystercard activity' do
-    it 'is in use' do
-      expect(card).not_to be_in_journey
-    end
-  end
-
 
   describe '#touch_in' do
 
-    context 'in jouney' do
+    it 'raises an error if oystercard has insufficient funds' do
+      expect { card.touch_in(entry_station) }.to raise_error "You have insufficient funds."
+    end
 
-      it 'stores the entry station' do
-        card.top_up(4)
-        card.touch_in(entry_station)
-        expect(card.entry_station).to eq entry_station
-      end
-
-      it 'raises an error if oystercard has insufficient funds' do
-        expect { card.touch_in(entry_station) }.to raise_error "You have insufficient funds."
-      end
+    context 'in journey' do
 
       it 'stores a journey' do
         card.top_up(4)
@@ -61,12 +49,6 @@ describe Oystercard do
     end
   end
 
-    #it 'touches in' do
-    #  card.top_up(10)
-      #card.touch_in(entry_station)
-    #  expect(card).to be_in_journey
-    #end
-
   describe '#touch_out' do
 
     before do
@@ -74,18 +56,10 @@ describe Oystercard do
       card.touch_in(entry_station)
     end
 
-    it 'touches out' do
-      card.touch_out(exit_station)
-      expect(card).not_to be_in_journey
-    end
     it 'deducts minimum fair from balance on touch out' do
       expect { card.touch_out(exit_station) }.to change { card.balance }.by(-Oystercard::MINIMUM_FAIR)
     end
 
-    it 'stores exit station' do
-      card.touch_out(exit_station)
-      expect(card.exit_station).to eq exit_station
-    end
   end
 
 end

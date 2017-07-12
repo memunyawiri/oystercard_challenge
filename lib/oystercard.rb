@@ -1,3 +1,5 @@
+require_relative "station"
+
 class Oystercard
 
   MAXIMUM_BALANCE = 90
@@ -17,20 +19,20 @@ class Oystercard
 
   def touch_in(station)
     fail "You have insufficient funds." if balance < MINIMUM_FAIR
-    @entry_station = station
+    #@entry_station = station
     @journeys[:entry_station] = station
   end
 
   def touch_out(station)
     deduct(MINIMUM_FAIR)
-    @entry_station =  nil
-    @exit_station = station
+    #@entry_station =  nil
+    #@exit_station = station
     @journeys[:exit_station] = station
   end
 
-  def in_journey?
-    !!entry_station
-  end
+  #def in_journey?
+  #  !!entry_station
+  #end
 
   private
 
