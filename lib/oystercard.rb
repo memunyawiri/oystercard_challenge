@@ -19,13 +19,12 @@ class Oystercard
 
   def touch_in(station)
     fail "You have insufficient funds." if balance < Journey::MINIMUM_FARE
-    deduct(current_journey.fare) unless current_journey.nil? || current_journey.complete?
+    deduct(current_journey.fare) unless journey_validator
     @current_journey = Journey.new(station)
   end
 
   def touch_out(station)
-    @current_journey = Journey.new(nil) if current_journey.nil? || current_journey.complete?
-    current_journey.end_journey(station)
+    journey_ender(station)
     deduct(current_journey.fare)
     record_journeys
   end
@@ -40,4 +39,12 @@ class Oystercard
     @balance -= amount
   end
 
+  def journey_validator
+    current_journey.nil? || current_journey.complete?
+  end
+
+  def journey_ender(station)
+    @current_journey = Journey.new(nil) if journey_validator
+    current_journey.end_journey(station)
+  end
 end
