@@ -6,7 +6,7 @@ describe Oystercard do
   let(:station){double :station}
   let(:entry_station) { double :station }
   let(:exit_station) { double :station }
-  let(:journey){ {entry_station: entry_station, exit_station: exit_station} }
+  let(:journey){ double :journey }
 
   describe 'Oystercard has initial balance' do
     it 'has a balance of zero' do
@@ -38,7 +38,7 @@ describe Oystercard do
         card.top_up(4)
         card.touch_in(entry_station)
         card.touch_out(exit_station)
-        expect(card.journeys).to include journey
+        expect(card.journeys.length).to eq 1
       end
     end
   end
@@ -49,7 +49,7 @@ describe Oystercard do
       card.touch_in(entry_station)
     end
     it 'deducts minimum fair from balance on touch out' do
-      expect { card.touch_out(exit_station) }.to change { card.balance }.by(-Oystercard::MINIMUM_FAIR)
+      expect { card.touch_out(exit_station) }.to change { card.balance }.by(-Journey::MINIMUM_FARE)
     end
   end
 end
