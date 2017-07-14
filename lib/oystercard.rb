@@ -3,7 +3,7 @@ require_relative 'journeylog'
 class Oystercard
 
   MAXIMUM_BALANCE = 90
-  MINIMUM_BALANCE = 1 #shouldn't be using MINIMUM_FARE should be using MINIMUM_BALANCE and update test
+  MINIMUM_BALANCE = 1
 
   attr_reader :balance
 

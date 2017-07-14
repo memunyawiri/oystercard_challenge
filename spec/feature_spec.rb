@@ -1,26 +1,23 @@
 require './lib/oystercard'
+require './lib/station'
 
-=begin
+=begin commented out as raised errors break code when running rspec
+
 oystercard = Oystercard.new
-station1 = Station.new
-station2 = Station.new
-oystercard.top_up(4)
-oystercard.journeys
- => nil
-#p oystercard.touch_in(station1)
+p oystercard
+station1 = Station.new("Victoria", 2)
+p station1
+station2 = Station.new("Shadwell", 1)
+p station2
+p oystercard.balance
+p oystercard.touch_in(station1)
+p oystercard.top_up(20)
+oystercard.touch_in(station1)
+oystercard.touch_out(station2)
+oystercard.touch_out(station2)
 p oystercard.journeys
-#p oystercard.touch_out(station2)
-p oystercard.journeys
-#{:station1 => station2}
-# => [entry_station: station1, exit_station: station2]
-
-#p oystercard
-#oystercard.balance
-#p oystercard
-#oystercard.top_up(20)
-#p oystercard
-#oystercard.touch_in
-#p oystercard
-#oystercard.touch_out
-#p oystercard
+p oystercard.balance
+oystercard.top_up(90)
+p oystercard
+p oystercard.balance
 =end

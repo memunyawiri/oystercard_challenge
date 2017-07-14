@@ -1,7 +1,7 @@
 require 'journey'
 
 describe Journey do
-  subject(:journey) { described_class.new("Victoria")}
+  subject(:journey) { described_class.new("Victoria") }
 
   describe "initialization" do
     it "should return the station where a journey began" do

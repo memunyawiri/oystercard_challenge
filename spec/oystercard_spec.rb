@@ -3,7 +3,7 @@ require 'oystercard'
 describe Oystercard do
 
   subject(:card) { described_class.new }
-  let(:station){double :station}
+  let(:station) { double :station }
   let(:entry_station) { double :station }
   let(:exit_station) { double :station }
 #  let(:journey){ double :journey }
