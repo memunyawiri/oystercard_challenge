@@ -1,3 +1,4 @@
+
 class JourneyLog
 
   def initialize(journey_class = Journey)
