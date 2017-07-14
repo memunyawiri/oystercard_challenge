@@ -56,8 +56,8 @@ As a customer
 I need to have the correct fare calculated
 ```
 
-How the application currently works
-========================================
+## How the application currently works
+
 ```
 2.4.0 :001 > require './lib/oystercard'
  => true
@@ -103,7 +103,7 @@ RuntimeError: You have insufficient funds.
  => 90
 
 ```
-#Gems used for this exercise
+## Gems used for this exercise
 - GuardSpec - as gem and as Atom package
 - Rubocop
 - simplecov & simplecov-console
@@ -113,7 +113,7 @@ RuntimeError: You have insufficient funds.
 
 See Gemfile for filekeys
 
-#Notes on challenges completed
+## Notes on challenges completed
 - Challenges 1-15 completed
 - 1 offence on rubocop, offence in gemfile - breaks if corrected
 - 100% test coverage across all 8 files
