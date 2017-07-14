@@ -6,7 +6,7 @@ describe Oystercard do
   let(:station){double :station}
   let(:entry_station) { double :station }
   let(:exit_station) { double :station }
-  let(:journey){ double :journey }
+#  let(:journey){ double :journey }
 
   describe 'Oystercard has initial balance' do
     it 'has a balance of zero' do
@@ -19,18 +19,17 @@ describe Oystercard do
     end
   end
   describe '#top_up' do
-    it 'can top up the balance' do
+    it 'can be topped up' do
       expect { card.top_up(1) }.to change { card.balance }.by(1)
     end
-    it 'raises an error if the maximum balance is exceeded' do
+    it 'raises an error if the maximum top_up balance is exceeded' do
       maximum_balance = Oystercard::MAXIMUM_BALANCE
       card.top_up(maximum_balance)
       expect { card.top_up 1 }.to raise_error "Maximum balance of #{maximum_balance} exceeded."
     end
   end
   describe '#touch_in' do
-
-    it 'raises an error if oystercard has insufficient funds' do
+    it 'raises an error if it touches in with insufficient funds' do
       expect { card.touch_in(entry_station) }.to raise_error "You have insufficient funds."
     end
     context 'in journey' do
@@ -48,6 +47,7 @@ describe Oystercard do
       card.top_up(1)
       card.touch_in(entry_station)
     end
+
     it 'deducts minimum fair from balance on touch out' do
       expect { card.touch_out(exit_station) }.to change { card.balance }.by(-Journey::MINIMUM_FARE)
     end

@@ -4,12 +4,13 @@ require_relative "journey"
 class Oystercard
 
   MAXIMUM_BALANCE = 90
+  #MINIMUM_BALANCE = 1 shouldn't be using MINIMUM_FARE should be using MINIMUM_BALANCE and update test
 
-  attr_reader :balance, :entry_station, :exit_station, :journeys, :current_journey
+  attr_reader :balance, :journeys, :current_journey
 
   def initialize
     @balance = 0
-    @journeys = []
+    @journeys = []#JourneyLog.new
   end
 
   def top_up(amount)
