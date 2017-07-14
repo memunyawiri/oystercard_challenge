@@ -1,16 +1,15 @@
-require_relative "station"
-require_relative "journey"
+require_relative 'journeylog'
 
 class Oystercard
 
   MAXIMUM_BALANCE = 90
-  #MINIMUM_BALANCE = 1 shouldn't be using MINIMUM_FARE should be using MINIMUM_BALANCE and update test
+  MINIMUM_BALANCE = 1 #shouldn't be using MINIMUM_FARE should be using MINIMUM_BALANCE and update test
 
-  attr_reader :balance, :journeys, :current_journey
+  attr_reader :balance
 
   def initialize
     @balance = 0
-    @journeys = []#JourneyLog.new
+    @journey_log = JourneyLog.new
   end
 
   def top_up(amount)
@@ -19,19 +18,23 @@ class Oystercard
   end
 
   def touch_in(station)
-    fail "You have insufficient funds." if balance < Journey::MINIMUM_FARE
-    deduct(current_journey.fare) unless journey_validator
-    @current_journey = Journey.new(station)
+    fail "You have insufficient funds." if balance < MINIMUM_BALANCE
+    deduct(@journey_log.journeys.last.fare) if in_journey?
+    @journey_log.start(station)
   end
 
   def touch_out(station)
-    journey_ender(station)
-    deduct(current_journey.fare)
-    record_journeys
+    @journey_log.finish(station)
+    deduct(@journey_log.journeys.last.fare)
   end
 
-  def record_journeys
-    @journeys << current_journey
+  def journeys
+    @journey_log.journeys.dup
+  end
+
+  def in_journey?
+    return false if @journey_log.journeys.empty?
+    !@journey_log.journeys.last.exit_station
   end
 
   private
@@ -40,12 +43,4 @@ class Oystercard
     @balance -= amount
   end
 
-  def journey_validator
-    current_journey.nil? || current_journey.complete?
-  end
-
-  def journey_ender(station)
-    @current_journey = Journey.new(nil) if journey_validator
-    current_journey.end_journey(station)
-  end
 end

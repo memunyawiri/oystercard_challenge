@@ -1,11 +1,12 @@
 require './lib/oystercard'
 
+=begin
 oystercard = Oystercard.new
-#station1 = Station.new
-#station2 = Station.new
+station1 = Station.new
+station2 = Station.new
 oystercard.top_up(4)
 oystercard.journeys
-# => nil
+ => nil
 #p oystercard.touch_in(station1)
 p oystercard.journeys
 #p oystercard.touch_out(station2)
@@ -22,3 +23,4 @@ p oystercard.journeys
 #p oystercard
 #oystercard.touch_out
 #p oystercard
+=end

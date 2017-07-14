@@ -33,23 +33,35 @@ describe Oystercard do
       expect { card.touch_in(entry_station) }.to raise_error "You have insufficient funds."
     end
     context 'in journey' do
-      it 'stores a journey' do
+      it 'stores a journey\'s entry station' do
         card.top_up(4)
         card.touch_in(entry_station)
         card.touch_out(exit_station)
-        expect(card.journeys.length).to eq 1
+        expect(card.journeys.last.entry_station).to eq entry_station
+      end
+      it 'stores a journey\'s exit station' do
+        card.top_up(4)
+        card.touch_in(entry_station)
+        card.touch_out(exit_station)
+        expect(card.journeys.last.exit_station).to eq exit_station
       end
     end
   end
   describe '#touch_out' do
 
     before do
-      card.top_up(1)
+      card.top_up(20)
       card.touch_in(entry_station)
     end
 
     it 'deducts minimum fair from balance on touch out' do
-      expect { card.touch_out(exit_station) }.to change { card.balance }.by(-Journey::MINIMUM_FARE)
+      expect { card.touch_out(exit_station) }.to change { card.balance }.by(-Oystercard::MINIMUM_BALANCE)
+    end
+    it 'can store multiple journeys' do
+      card.touch_out(exit_station)
+      card.touch_in(exit_station)
+      card.touch_out(entry_station)
+      expect(card.journeys.length).to eq 2
     end
   end
 end
